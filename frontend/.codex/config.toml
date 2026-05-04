@@ -1,0 +1,19 @@
+[shell_environment_policy]
+
+# inherit: all (default) | core | none
+inherit = "all"
+
+# Skip default excludes for names containing KEY/SECRET/TOKEN (case-insensitive). Default: false
+ignore_default_excludes = false
+
+# Case-insensitive glob patterns to remove (e.g., "AWS_*", "AZURE_*"). Default: []
+exclude = ["AWS_*", "AZURE_*"]
+
+# Explicit key/value overrides (always win). Default: {}
+set = {}
+
+# Whitelist; if non-empty, keep only matching vars. Default: []
+include_only = []
+
+# Experimental: run via user shell profile. Default: false
+experimental_use_profile = false

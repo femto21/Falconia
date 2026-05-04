@@ -1,0 +1,17 @@
+package com.femto.falconia.controller;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping(path = "/api/v1/links")
+public class LinkController {
+
+    public LinkController(
+
+
+
+    ){
+
+    }
+}
