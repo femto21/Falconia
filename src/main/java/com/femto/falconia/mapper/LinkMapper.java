@@ -1,11 +1,15 @@
 package com.femto.falconia.mapper;
 
 import com.femto.falconia.domain.dto.AddLinkRequestDto;
+import com.femto.falconia.domain.dto.LinkDto;
 import com.femto.falconia.domain.entity.AddLinkRequest;
+import com.femto.falconia.domain.entity.Link;
+
+import java.util.UUID;
 
 public interface LinkMapper {
 
-    AddLinkRequest fromAddLinkDto(AddLinkRequestDto dto);
+    AddLinkRequest fromAddLinkDto(UUID userId, AddLinkRequestDto dto);
 
-    AddLinkRequestDto toAddLinkDto(AddLinkRequest request);
+    LinkDto toLinkDto(Link link);
 }

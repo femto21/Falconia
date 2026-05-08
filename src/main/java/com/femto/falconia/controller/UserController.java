@@ -21,12 +21,10 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
-    private final JwtService jwtService;
 
-    public UserController(UserService userService, UserMapper userMapper, JwtService jwtService) {
+    public UserController(UserService userService, UserMapper userMapper) {
         this.userService = userService;
         this.userMapper = userMapper;
-        this.jwtService = jwtService;
     }
 
     @PostMapping(path = "/register")

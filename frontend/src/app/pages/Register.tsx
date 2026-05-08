@@ -3,7 +3,6 @@ import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import type { UserRegisterPayload } from "@/lib/types";
 import { useState } from "react";
-import { useNavigate } from "react-router";
 
 const Register = () => {
   const [userRegisterData, setUserRegisterData] = useState<UserRegisterPayload>(

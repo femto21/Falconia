@@ -11,14 +11,25 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useEffect, useState } from "react";
+import type { CreateLinkPayload } from "@/lib/types";
+import { useEffect, useState, type FormEvent } from "react";
 import { useNavigate } from "react-router";
+
+type UserLink = {
+  id?: string | number;
+  linkName: string;
+  url: string;
+};
 
 const Home = () => {
   const [username, setUsername] = useState<string | null>(null);
+  const [links, setLinks] = useState<UserLink[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [showNewLinkDialog, setShowNewLinkDialog] = useState<boolean>(false);
-  const [link, setLink] = useState<string>("");
+  const [newLinkData, setNewLinkData] = useState<CreateLinkPayload>({
+    linkName: "",
+    url: "",
+  });
   const [addLinkResult, setAddLinkResult] = useState<string>("");
 
   const navigate = useNavigate();
@@ -28,21 +39,27 @@ const Home = () => {
 
     const getUserDetails = async () => {
       try {
-        const res = await fetch("http://localhost:8080/api/v1/users/me", {
-          headers: {
-            Authorization: `Bearer ${storedToken}`,
-            "Content-Type": "application/json",
-          },
-        });
+        const headers = {
+          Authorization: `Bearer ${storedToken}`,
+          "Content-Type": "application/json",
+        };
 
-        if (!res.ok) {
+        const [userRes, linksRes] = await Promise.all([
+          fetch("http://localhost:8080/api/v1/users/me", { headers }),
+          fetch("http://localhost:8080/api/v1/links", { headers }),
+        ]);
+
+        if (!userRes.ok || !linksRes.ok) {
           sessionStorage.removeItem("token");
           navigate("/login");
-          throw new Error("error fetching user details");
+          throw new Error("error fetching home data");
         }
 
-        const data = await res.json();
-        setUsername(data.username);
+        const userData = await userRes.json();
+        const linksData = await linksRes.json();
+
+        setUsername(userData.username);
+        setLinks(Array.isArray(linksData) ? linksData : []);
       } catch (error) {
         console.error(error);
       } finally {
@@ -64,11 +81,13 @@ const Home = () => {
     return `https://${trimmedValue}`;
   };
 
-  const handleAddLink = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleAddLink = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const normalizedLink = normalizeLink(link);
-    if (!normalizedLink) return;
+    const normalizedName = newLinkData.linkName.trim();
+    const normalizedLink = normalizeLink(newLinkData.url);
+
+    if (!normalizedName || !normalizedLink) return;
 
     const storedToken = sessionStorage.getItem("token");
 
@@ -79,7 +98,7 @@ const Home = () => {
           Authorization: `Bearer ${storedToken}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ link: normalizedLink }),
+        body: JSON.stringify({ linkName: normalizedName, url: normalizedLink }),
       });
 
       if (!res.ok) {
@@ -87,7 +106,7 @@ const Home = () => {
       }
 
       setAddLinkResult("success");
-      setLink("");
+      setNewLinkData({ linkName: "", url: "" });
       setShowNewLinkDialog(false);
     } catch (error) {
       console.error(error);
@@ -105,7 +124,20 @@ const Home = () => {
         <div className="mt-8 w-1/2 flex flex-col items-center">
           <p className="text-2xl font-bold">Your Links</p>
           <div className="w-full flex flex-col  max-h-40 rounded-2xl p-4 border-2 mt-4">
-            <a>links here</a>
+            {links.length > 0 ? (
+              links.map((savedLink, index) => (
+                <a
+                  key={savedLink.id ?? `${savedLink.url}-${index}`}
+                  href={savedLink.url}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {savedLink.linkName}
+                </a>
+              ))
+            ) : (
+              <p>No links added yet.</p>
+            )}
             <div className="flex justify-end">
               <Dialog
                 open={showNewLinkDialog}
@@ -125,6 +157,23 @@ const Home = () => {
                   </DialogHeader>
                   <form onSubmit={handleAddLink} className="grid gap-4">
                     <div className="grid gap-2">
+                      <Label htmlFor="link-name">Link Name</Label>
+                      <Input
+                        id="link-name"
+                        name="link-name"
+                        type="text"
+                        required
+                        value={newLinkData.linkName}
+                        onChange={(event) =>
+                          setNewLinkData({
+                            ...newLinkData,
+                            linkName: event.target.value,
+                          })
+                        }
+                        placeholder="GitHub"
+                      />
+                    </div>
+                    <div className="grid gap-2">
                       <Label htmlFor="link">Link URL</Label>
                       <div className="flex items-center rounded-md border border-input bg-transparent shadow-xs focus-within:ring-[3px] focus-within:ring-ring/50">
                         <span className="border-r border-input px-3 text-sm text-muted-foreground">
@@ -132,10 +181,17 @@ const Home = () => {
                         </span>
                         <Input
                           id="link"
+                          name="link"
                           type="text"
                           inputMode="url"
-                          value={link}
-                          onChange={(event) => setLink(event.target.value)}
+                          required
+                          value={newLinkData.url}
+                          onChange={(event) =>
+                            setNewLinkData({
+                              ...newLinkData,
+                              url: event.target.value,
+                            })
+                          }
                           placeholder="example.com"
                           className="border-0 shadow-none focus-visible:ring-0"
                         />
