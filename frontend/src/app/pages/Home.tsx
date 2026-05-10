@@ -11,15 +11,9 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type { CreateLinkPayload } from "@/lib/types";
+import type { CreateLinkPayload, UserLink } from "@/lib/types";
 import { useEffect, useState, type FormEvent } from "react";
 import { useNavigate } from "react-router";
-
-type UserLink = {
-  id?: string | number;
-  linkName: string;
-  url: string;
-};
 
 const Home = () => {
   const [username, setUsername] = useState<string | null>(null);

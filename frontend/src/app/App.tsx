@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import ProtectedRoute from "@/hooks/ProtectedRoute";
+import PublicProfilePage from "./pages/PublicProfile";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
 
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/:username" element={<PublicProfilePage />} />
           </Routes>
         </main>
       </div>

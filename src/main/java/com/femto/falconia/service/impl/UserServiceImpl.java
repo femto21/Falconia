@@ -1,16 +1,13 @@
 package com.femto.falconia.service.impl;
 
-import com.femto.falconia.domain.entity.LoginUserRequest;
-import com.femto.falconia.domain.entity.RegisterUserRequest;
+import com.femto.falconia.domain.model.LoginUserRequest;
+import com.femto.falconia.domain.model.RegisterUserRequest;
 import com.femto.falconia.domain.entity.User;
 import com.femto.falconia.repository.UserRepository;
 import com.femto.falconia.service.JwtService;
 import com.femto.falconia.service.UserService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {

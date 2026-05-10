@@ -15,3 +15,17 @@ export type CreateLinkPayload = {
   linkName: string;
   url: string;
 };
+
+export type UserLink = {
+  id?: string;
+  userId?: string;
+  linkName: string;
+  url: string;
+};
+
+export type PublicProfile = {
+  username: string;
+  firstName: string;
+  lastName: string;
+  links: UserLink[];
+};

@@ -1,4 +1,4 @@
-package com.femto.falconia.domain.entity;
+package com.femto.falconia.domain.model;
 
 import java.util.UUID;
 

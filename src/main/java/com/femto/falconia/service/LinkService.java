@@ -1,7 +1,6 @@
 package com.femto.falconia.service;
 
-import com.femto.falconia.domain.dto.AddLinkRequestDto;
-import com.femto.falconia.domain.entity.AddLinkRequest;
+import com.femto.falconia.domain.model.AddLinkRequest;
 import com.femto.falconia.domain.entity.Link;
 
 import java.util.List;
