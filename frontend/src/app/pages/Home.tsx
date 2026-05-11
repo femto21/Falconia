@@ -117,7 +117,7 @@ const Home = () => {
         <div className="text-3xl font-extrabold">Welcome, {username}</div>
         <div className="mt-8 w-1/2 flex flex-col items-center">
           <p className="text-2xl font-bold">Your Links</p>
-          <div className="w-full flex flex-col  max-h-40 rounded-2xl p-4 border-2 mt-4">
+          <div className="mt-4 flex max-h-80 w-full flex-col gap-3 rounded-2xl border-2 p-4">
             {links.length > 0 ? (
               links.map((savedLink, index) => (
                 <a
@@ -125,8 +125,14 @@ const Home = () => {
                   href={savedLink.url}
                   target="_blank"
                   rel="noreferrer"
+                  className="rounded-xl border px-4 py-3 transition hover:bg-accent"
                 >
-                  {savedLink.linkName}
+                  <p className="truncate text-sm text-muted-foreground">
+                    {savedLink.url}
+                  </p>
+                  <p className="mt-1 text-base font-semibold">
+                    {savedLink.linkName}
+                  </p>
                 </a>
               ))
             ) : (
